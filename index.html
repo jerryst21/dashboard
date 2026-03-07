@@ -173,7 +173,7 @@
 <div id="pin-overlay">
     <div class="pin-header">
         <i data-lucide="shield-check" style="width: 40px; height: 40px; color: var(--accent);"></i>
-        <h2>Akses Dashboard v2</h2>
+        <h2>Akses Dashboard v3</h2>
         <p>Silakan masukkan 6 digit PIN Anda</p>
     </div>
     
@@ -334,22 +334,27 @@ function updateDots() {
 }
 
 async function validatePin(pin) {
+    // Paksa konversi string PIN menjadi angka utuh
+    const pinAsNumber = Number(pin);
+
     const { data, error } = await supabaseClient
         .from('access_control')
         .select('id')
-        .eq('pin_code', pin)
+        .eq('pin_code', pinAsNumber) // Mencocokkan angka dengan angka
         .single();
 
     if (error) {
-        console.error("Error dari Supabase:", error.message);
+        console.error("Detail Error:", error.message);
     }
 
     if (data) {
+        // Berhasil Login
         document.getElementById('pin-overlay').style.display = 'none';
         document.getElementById('main-wrapper').style.display = 'block';
         document.getElementById('main-nav').style.display = 'flex';
         lucide.createIcons();
     } else {
+        // Gagal Login
         alert("PIN Salah atau Akses Ditolak!");
         clearPin();
     }
