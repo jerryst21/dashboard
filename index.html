@@ -308,7 +308,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // --- LOGIKA PIN ---
 let currentPin = "";
-const targetPinLength = 6; // Diubah menjadi 6 digit
+const targetPinLength = 6;
 
 function addPin(num) {
     if (currentPin.length < targetPinLength) {
@@ -334,21 +334,17 @@ function updateDots() {
 }
 
 async function validatePin(pin) {
-    // 1. Konversi string PIN ke angka karena tipe data di database adalah int8
     const pinNumber = Number(pin);
-
-    // 2. Query ke Supabase tanpa memanggil kolom 'id'
     const { data, error } = await supabaseClient
         .from('access_control')
-        .select('pin_code') // <--- Kita ganti 'id' menjadi 'pin_code'
+        .select('pin_code')
         .eq('pin_code', pinNumber)
-        .maybeSingle(); // Menggunakan maybeSingle agar lebih aman jika data kosong
+        .maybeSingle();
 
     if (error) {
         console.error("Detail Error:", error.message);
     }
 
-    // 3. Jika data ditemukan, berarti PIN cocok
     if (data) {
         document.getElementById('pin-overlay').style.display = 'none';
         document.getElementById('main-wrapper').style.display = 'block';
@@ -360,20 +356,55 @@ async function validatePin(pin) {
     }
 }
 
-// --- LOGIKA DASHBOARD (Konten Tetap) ---
+// --- LOGIKA DASHBOARD & ESTIMASI ---
+
+// Fungsi baru untuk mengubah "3B, 0H, 0J, 0M, 0D" menjadi Tanggal Nyata
+function parseDurationToDate(durationStr) {
+    const parts = durationStr.match(/\d+/g).map(Number);
+    if (!parts || parts.length < 5) return null;
+    
+    const [months, days, hours, minutes, seconds] = parts;
+    const now = new Date();
+    
+    // Tambahkan durasi ke waktu sekarang
+    now.setMonth(now.getMonth() + months);
+    now.setDate(now.getDate() + days);
+    now.setHours(now.getHours() + hours);
+    now.setMinutes(now.getMinutes() + minutes);
+    now.setSeconds(now.getSeconds() + seconds);
+
+    return now.toISOString();
+}
+
 const countdownGroups = [
     {
         category: "Masa Aktif Kartu",
         items: [
-            { id: "sim1", title: "Telkomsel 0822 8887 1983", date: "2026-03-15T00:00:00", icon: "smartphone" },
-            { id: "sim2", title: "Telkomsel Laundry Inijo", date: "2026-05-20T23:59:59", icon: "smartphone" }
+            { id: "sim1", title: "Telkomsel 0822 8887 1983", date: "2026-03-15T00:00:00", icon: "card-sim" },
+            { id: "sim2", title: "Telkomsel Laundry Inijo", date: "2026-05-20T23:59:59", icon: "card-sim" }
         ]
     },
     {
-        category: "Pemeliharaan Device",
+        category: "Estimasi Masa Aktif Kartu",
         items: [
-            { id: "dev1", title: "Servis Rutin Warehouse", date: "2026-03-25T09:00:00", icon: "warehouse" },
-            { id: "dev2", title: "Cek Filter Akuarium", date: "2026-03-10T12:00:00", icon: "waves" }
+            // Contoh penggunaan durasi estimasi
+            { id: "est1", title: "Masa Berlaku 30 Hari", duration: "0B, 30H, 0J, 0M, 0D", icon: "card-sim" }
+        ]
+    },
+    {
+        category: "Boundless Countdown",
+        items: [
+            { id: "bon1", title: "Portal", date: "2026-03-05T17:28:25", icon: "door-open" },
+            { id: "bon2", title: "Planet", date: "2026-03-25T18:36:46", icon: "orbit" }
+        ]
+    },
+    {
+        category: "Boundless Estimate",
+        items: [
+            { id: "srv1", title: "Club 180 Hari", duration: "0B, 180H, 0J, 0M, 0D", icon: "door-open" },
+            { id: "srv2", title: "Portal 5 Minggu 2 Hari (37 Hari)", duration: "0B, 37H, 0J, 0M, 0D", icon: "door-open" },
+            { id: "srv3", title: "Compactor 5 Jam 50 Min", duration: "0B, 0H, 5J, 50M, 0D", icon: "door-open" },
+            { id: "srv99", title: "Planet Expire 120 Hari", duration: "0B, 120H, 0J, 0M, 0D", icon: "orbit" }
         ]
     }
 ];
@@ -396,27 +427,61 @@ function copyToClipboard(id) {
     });
 }
 
-function startCountdown(id, datetime) {
+function startCountdown(id, datetime, isEstimation = false, durationStr = null) {
     const el = document.getElementById(id);
     if(!el) return;
+    
     const timer = setInterval(() => {
-        const diff = new Date(datetime).getTime() - new Date().getTime();
+        const now = new Date();
+        
+        // JIKA ESTIMASI: Hitung ulang target berdasarkan waktu 'now' + durasi
+        if (isEstimation && durationStr) {
+            const newTarget = parseDurationToDate(durationStr);
+            el.innerText = formatFullDate(newTarget);
+            return; 
+        }
+
+        // JIKA COUNTDOWN BIASA
+        const targetDate = new Date(datetime);
+        const diff = targetDate.getTime() - now.getTime();
+
         if (diff <= 0) {
             clearInterval(timer);
             el.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;color:#e11d48;"><i data-lucide="alarm-clock-check" style="width:18px;"></i> Selesai!</span>`;
             lucide.createIcons();
             return;
         }
-        const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+
+        const d = Math.floor(diff / 86400000), 
+              h = Math.floor((diff % 86400000) / 3600000), 
+              m = Math.floor((diff % 3600000) / 60000), 
+              s = Math.floor((diff % 60000) / 1000);
         el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
+}
+
+// Fungsi untuk memformat tanggal menjadi "YYYY-MM-DD HH:mm:ss"
+function formatFullDate(date) {
+    const d = new Date(date);
+    const pad = (n) => n.toString().padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
 function renderSections() {
     const container = document.getElementById('dynamic-sections');
     container.innerHTML = "";
+    
     countdownGroups.forEach(group => {
+        group.items.forEach(item => {
+            if (item.duration && !item.date) {
+                // Kalkulasi awal untuk keperluan sorting saja
+                item.date = parseDurationToDate(item.duration);
+                item.isEstimation = true;
+            }
+        });
+
         group.items.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
         const st = document.createElement('div');
         st.className = 'section-title';
         st.innerText = group.category;
@@ -434,14 +499,15 @@ function renderSections() {
                 </div>
                 <div class="arrow">→</div>`;
             container.appendChild(link);
-            startCountdown(item.id, item.date);
+            
+            // Tambahkan parameter item.duration di akhir
+            startCountdown(item.id, item.date, item.isEstimation, item.duration);
         });
     });
     lucide.createIcons();
 }
 
 function logout() {
-    // Sembunyikan dashboard dan tampilkan kembali overlay PIN
     document.getElementById('pin-overlay').style.display = 'flex';
     document.getElementById('main-wrapper').style.display = 'none';
     document.getElementById('main-nav').style.display = 'none';
