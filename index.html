@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #3b82f6;
+            --border: #e2e8f0;
+            --nav-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 20px 100px 20px; /* Padding bawah untuk navigasi */
+        }
+
+        /* SPA Section Logic */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 10px; }
+        header p { color: var(--text-muted); font-size: 1rem; }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin: 30px 0 12px 5px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .form-link {
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            text-decoration: none;
+            border-radius: 16px;
+            border: 1.5px solid var(--border);
+            transition: all 0.2s ease;
+            color: inherit;
+        }
+
+        .form-link:hover {
+            border-color: var(--accent);
+            transform: scale(1.01);
+        }
+
+        .icon-container {
+            flex-shrink: 0;
+            width: 45px;
+            margin-right: 18px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .awe-icon { font-size: 1.75rem !important; color: #FFC738; }
+        
+        .icon-laundry {
+            width: 32px;
+            height: 32px;
+            color: #64748b;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 4px;
+        }
+
+        .content .title { font-weight: 600; font-size: 1.15rem; }
+        .content .description { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+
+        .arrow { color: #cbd5e1; font-size: 1.25rem; margin-left: 10px; }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .nav-item i, .nav-item svg { width: 24px; height: 24px; }
+
+        .nav-item.active { color: var(--accent); }
+        .nav-item.active .nav-indicator {
+            width: 20px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 10px;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div id="page-countdown" class="page-section active">
+        <header>
+            <h1>Daftar Pengingat</h1>
+            <p>Pantau tenggat waktu penting</p>
+        </header>
+        <div id="dynamic-sections"></div>
+    </div>
+
+    <div id="page-formulir" class="page-section">
+        <header>
+            <h1>Pusat Formulir</h1>
+            <p>Pilih layanan di bawah ini</p>
+        </header>
+        <main>
+            <div class="section-title">Layanan Keluarga</div>
+            <a href="https://forms.fillout.com/t/8MVkMiqyPgus" class="form-link" target="_blank">
+                <div class="icon-container"><i class="fa-regular fa-bell awe-icon"></i></div>
+                <div class="content">
+                    <span class="title">Pengingat Keluarga</span>
+                    <span class="description">Atur jadwal notifikasi otomatis ke grup WhatsApp.</span>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+            <a href="https://forms.fillout.com/t/dWBAmS9te4us" class="form-link" target="_blank">
+                <div class="icon-container"><i class="fa-solid fa-book-medical awe-icon"></i></div>
+                <div class="content">
+                    <span class="title">Rekam Medis Jerry - Siska</span>
+                    <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+            <a href="https://forms.fillout.com/t/vvMetw9MAyus" class="form-link" target="_blank">
+                <div class="icon-container"><i class="fa-solid fa-book-medical awe-icon"></i></div>
+                <div class="content">
+                    <span class="title">Rekam Medis Papa - Mama</span>
+                    <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+
+            <div class="section-title">INIJO LAUNDRY</div>
+            <a href="#" class="form-link">
+                <div class="icon-container"><i data-lucide="receipt-text" class="icon-laundry"></i></div>
+                <div class="content">
+                    <span class="title">Arsip Nota</span>
+                    <span class="description">Simpan data transaksi nota untuk arsip.</span>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+        </main>
+    </div>
+
+    <div id="page-bookmark" class="page-section">
+        <header>
+            <h1>Bookmark</h1>
+            <p>Akses cepat situs favorit</p>
+        </header>
+        <div class="section-title">Link Tersimpan</div>
+        <a href="https://github.com" class="form-link" target="_blank">
+            <div class="icon-container"><i data-lucide="github" class="icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">GitHub Dashboard</span>
+                <span class="description">Akses repositori dan project IT.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+        <a href="#" class="form-link">
+            <div class="icon-container"><i data-lucide="star" class="icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">Referensi Belajar</span>
+                <span class="description">Kumpulan artikel dan tutorial.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <a href="javascript:void(0)" class="nav-item active" onclick="switchPage('page-countdown', this)">
+        <i data-lucide="calendar-clock"></i>
+        <span>Countdown</span>
+        <div class="nav-indicator"></div>
+    </a>
+    <a href="javascript:void(0)" class="nav-item" onclick="switchPage('page-formulir', this)">
+        <i data-lucide="file-text"></i>
+        <span>Formulir</span>
+        <div class="nav-indicator"></div>
+    </a>
+    <a href="javascript:void(0)" class="nav-item" onclick="switchPage('page-bookmark', this)">
+        <i data-lucide="bookmark"></i>
+        <span>Bookmark</span>
+        <div class="nav-indicator"></div>
+    </a>
+</nav>
+
+<script>
+const countdownGroups = [
+    {
+        category: "Masa Aktif Kartu",
+        items: [
+            { id: "sim1", title: "Telkomsel 0822 8887 1983", date: "2026-03-15T00:00:00", icon: "smartphone" },
+            { id: "sim2", title: "Telkomsel Laundry Inijo", date: "2026-05-20T23:59:59", icon: "smartphone" }
+        ]
+    },
+    {
+        category: "Pemeliharaan Device",
+        items: [
+            { id: "dev1", title: "Servis Rutin Warehouse", date: "2026-03-25T09:00:00", icon: "warehouse" },
+            { id: "dev2", title: "Cek Filter Akuarium", date: "2026-03-10T12:00:00", icon: "waves" }
+        ]
+    }
+];
+
+function switchPage(pageId, navElement) {
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    navElement.classList.add('active');
+    
+    window.scrollTo(0, 0);
+    lucide.createIcons();
+}
+
+function copyToClipboard(id) {
+    const title = document.getElementById('title-' + id).innerText;
+    const countdownText = document.getElementById(id).innerText;
+    const fullText = `${title}: ${countdownText}`;
+    navigator.clipboard.writeText(fullText).then(() => {
+        alert("Teks berhasil disalin: " + fullText);
+    });
+}
+
+function startCountdown(id, datetime) {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const timer = setInterval(() => {
+        const diff = new Date(datetime).getTime() - new Date().getTime();
+        if (diff <= 0) {
+            clearInterval(timer);
+            el.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;color:#e11d48;"><i data-lucide="alarm-clock-check" style="width:18px;"></i> Selesai!</span>`;
+            lucide.createIcons();
+            return;
+        }
+        const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+        el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
+}
+
+function renderSections() {
+    const container = document.getElementById('dynamic-sections');
+    countdownGroups.forEach(group => {
+        group.items.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const st = document.createElement('div');
+        st.className = 'section-title';
+        st.innerText = group.category;
+        container.appendChild(st);
+
+        group.items.forEach(item => {
+            const link = document.createElement('a');
+            link.className = "form-link";
+            link.onclick = () => copyToClipboard(item.id);
+            link.innerHTML = `
+                <div class="icon-container"><i data-lucide="${item.icon}" class="icon-laundry"></i></div>
+                <div class="content">
+                    <span class="title" id="title-${item.id}">${item.title}</span>
+                    <span class="description" id="${item.id}">Memuat...</span>
+                </div>
+                <div class="arrow">→</div>`;
+            container.appendChild(link);
+            startCountdown(item.id, item.date);
+        });
+    });
+    lucide.createIcons();
+}
+
+document.addEventListener("DOMContentLoaded", renderSections);
+</script>
+</body>
+</html>
