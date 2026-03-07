@@ -340,13 +340,17 @@ async function validatePin(pin) {
         .eq('pin_code', pin)
         .single();
 
+    if (error) {
+        console.error("Error dari Supabase:", error.message);
+    }
+
     if (data) {
         document.getElementById('pin-overlay').style.display = 'none';
         document.getElementById('main-wrapper').style.display = 'block';
         document.getElementById('main-nav').style.display = 'flex';
         lucide.createIcons();
     } else {
-        alert("PIN Salah! Silakan coba lagi.");
+        alert("PIN Salah atau Akses Ditolak!");
         clearPin();
     }
 }
