@@ -143,13 +143,18 @@
         }
 
         .form-link:hover { border-color: var(--accent); transform: scale(1.01); }
+		.form-link:hover .arrow {
+			color: var(--accent);
+			margin-left: 10px;
+			transition: color 0.2s ease;
+		}
+		
         .icon-container { flex-shrink: 0; width: 45px; margin-right: 18px; display: flex; justify-content: center; }
         .awe-icon { font-size: 1.75rem !important; color: #64748b; }
         .icon-laundry { width: 32px; height: 32px; color: #64748b; font-size: 32px; }
         .content { display: flex; flex-direction: column; flex-grow: 1; gap: 4px; }
         .content .title { font-weight: 600; font-size: 1.15rem; }
         .content .description { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
-        .arrow { color: #cbd5e1; font-size: 1.25rem; margin-left: 10px; }
 
         .bottom-nav {
             position: fixed;
@@ -210,6 +215,8 @@
     </div>
 </div>
 
+<!--------------------------- COUNTDOWN SECTION --------------------------->
+
 <div class="wrapper" id="main-wrapper">
     <div id="page-countdown" class="page-section active">
         <header>
@@ -218,6 +225,8 @@
         </header>
         <div id="dynamic-sections"></div>
     </div>
+	
+<!--------------------------- FORMULIR SECTION --------------------------->
 
     <div id="page-formulir" class="page-section">
         <header>
@@ -263,15 +272,27 @@
         </main>
     </div>
 
+<!--------------------------- BOOKMARK SECTION --------------------------->
+
     <div id="page-bookmark" class="page-section">
         <header>
             <h1>Bookmark</h1>
             <p>Akses cepat situs favorit</p>
         </header>
 		
+        <div class="section-title">KONTRAK</div>
+        <a href="https://jerryst21.github.io/travel/" class="form-link" target="_blank">
+            <div class="icon-container"><i class="fi fi-rr-rent icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">Daftar Perjanjian Sewa Menyewa</span>
+                <span class="description">Informasi penyewa, masa waktu sewa, nilai sewa, jaminan dan catatan lain.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+		
         <div class="section-title">TRAVEL</div>
         <a href="https://jerryst21.github.io/travel/" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-ss-hand-fist icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rr-book-atlas icon-laundry"></i></div>
             <div class="content">
                 <span class="title">Travel Information</span>
                 <span class="description">Personal travel itinerary.</span>
@@ -281,14 +302,14 @@
 		
         <div class="section-title">BOUNDLESS</div>
         <a href="https://forum.playboundless.com" class="form-link" target="_blank">
-            <div class="icon-container"><i data-lucide="github" class="icon-laundry"></i></div>
+            <div class="icon-container"><i data-lucide="hand-fist" class="icon-laundry"></i></div>
             <div class="content">
                 <span class="title">Boundless Community Forum</span>
                 <span class="description">Info and Forum.</span>
             </div>
             <div class="arrow">→</div>
         </a>
-        <a href="https://butt.boundless.mayumi.fi/" class="form-link">
+        <a href="https://butt.boundless.mayumi.fi/" class="form-link" target="_blank">
             <div class="icon-container"><i class="fi fi-rs-tags icon-laundry"></i></div>
             <div class="content">
                 <span class="title">Boundless Universal Trade Tracker</span>
@@ -296,8 +317,26 @@
             </div>
             <div class="arrow">→</div>
         </a>
+        <a href="https://boundless.mayumi.fi/recipes/" class="form-link" target="_blank">
+            <div class="icon-container"><i class="fi fi-rr-calculator icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">Boundless Pricer</span>
+                <span class="description">Recipes Calculator.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+        <a href="https://boundlessinfo.com/home" class="form-link" target="_blank">
+            <div class="icon-container"><i class="fi fi-rs-tags icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">Boundless Information Station</span>
+                <span class="description">Information on worlds, resources, colors, items, farming and forging.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
     </div>
 </div>
+
+<!--------------------------- NAVIGATION TAB --------------------------->
 
 <nav class="bottom-nav" id="main-nav">
     <a href="javascript:void(0)" class="nav-item active" onclick="switchPage('page-countdown', this)">
@@ -535,8 +574,8 @@ function logout() {
 
 // --- KONFIGURASI REVISI (UPDATE DI SINI) ---
 function updateVersionDisplay() {
-    const lastUpdate = "2026-03-08 01.40 PM";
-    const note = "Update target link";  // Catatan revisi
+    const lastUpdate = "2026-03-08 02.34 PM";
+    const note = "Minor Update";  // Catatan revisi
     
     const versionEl = document.getElementById('version-info');
     if (versionEl) {
