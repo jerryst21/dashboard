@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dashboard</title>
-	<link rel="icon" href="uploads/2026-03-07-dashboardicon.png" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+	<link rel="icon" href="uploads/2026-03-08-dashboardicon.png" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	
+	<!-- Imported CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css'>
+	
     <style>
         :root {
             --bg-color: #f8fafc;
@@ -140,8 +144,8 @@
 
         .form-link:hover { border-color: var(--accent); transform: scale(1.01); }
         .icon-container { flex-shrink: 0; width: 45px; margin-right: 18px; display: flex; justify-content: center; }
-        .awe-icon { font-size: 1.75rem !important; color: #FFC738; }
-        .icon-laundry { width: 32px; height: 32px; color: #64748b; }
+        .awe-icon { font-size: 1.75rem !important; color: #64748b; }
+        .icon-laundry { width: 32px; height: 32px; color: #64748b; font-size: 32px; }
         .content { display: flex; flex-direction: column; flex-grow: 1; gap: 4px; }
         .content .title { font-weight: 600; font-size: 1.15rem; }
         .content .description { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
@@ -223,7 +227,7 @@
         <main>
             <div class="section-title">Layanan Keluarga</div>
             <a href="https://forms.fillout.com/t/8MVkMiqyPgus" class="form-link" target="_blank">
-                <div class="icon-container"><i class="fa-regular fa-bell awe-icon"></i></div>
+                <div class="icon-container"><i data-lucide="alarm-clock-plus" class="icon-laundry"></i></i></div>
                 <div class="content">
                     <span class="title">Pengingat Keluarga</span>
                     <span class="description">Atur jadwal notifikasi otomatis ke grup WhatsApp.</span>
@@ -231,7 +235,7 @@
                 <div class="arrow">→</div>
             </a>
             <a href="https://forms.fillout.com/t/dWBAmS9te4us" class="form-link" target="_blank">
-                <div class="icon-container"><i class="fa-solid fa-book-medical awe-icon"></i></div>
+                <div class="icon-container"><i data-lucide="clipboard-plus" class="icon-laundry"></i></i></div>
                 <div class="content">
                     <span class="title">Rekam Medis Jerry - Siska</span>
                     <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
@@ -239,7 +243,7 @@
                 <div class="arrow">→</div>
             </a>
             <a href="https://forms.fillout.com/t/vvMetw9MAyus" class="form-link" target="_blank">
-                <div class="icon-container"><i class="fa-solid fa-book-medical awe-icon"></i></div>
+                <div class="icon-container"><i data-lucide="clipboard-plus" class="icon-laundry"></i></i></div>
                 <div class="content">
                     <span class="title">Rekam Medis Papa - Mama</span>
                     <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
@@ -248,8 +252,8 @@
             </a>
 
             <div class="section-title">INIJO LAUNDRY</div>
-            <a href="https://forms.fillout.com/t/qENdoJR2j3us" class="form-link">
-                <div class="icon-container"><i data-lucide="receipt-text" class="icon-laundry"></i></div>
+            <a href="https://forms.fillout.com/t/qENdoJR2j3us" class="form-link" target="_blank">
+                <div class="icon-container"><i class="fi fi-rr-file-invoice-dollar icon-laundry"></i></div>
                 <div class="content">
                     <span class="title">Arsip Nota</span>
                     <span class="description">Simpan data transaksi nota untuk arsip.</span>
@@ -264,20 +268,31 @@
             <h1>Bookmark</h1>
             <p>Akses cepat situs favorit</p>
         </header>
-        <div class="section-title">Link Tersimpan</div>
-        <a href="https://github.com" class="form-link" target="_blank">
-            <div class="icon-container"><i data-lucide="github" class="icon-laundry"></i></div>
+		
+        <div class="section-title">TRAVEL</div>
+        <a href="https://jerryst21.github.io/travel/" class="form-link" target="_blank">
+            <div class="icon-container"><i class="fi fi-ss-hand-fist icon-laundry"></i></div>
             <div class="content">
-                <span class="title">GitHub Dashboard</span>
-                <span class="description">Akses repositori dan project IT.</span>
+                <span class="title">Travel Information</span>
+                <span class="description">Personal travel itinerary.</span>
             </div>
             <div class="arrow">→</div>
         </a>
-        <a href="#" class="form-link">
-            <div class="icon-container"><i data-lucide="star" class="icon-laundry"></i></div>
+		
+        <div class="section-title">BOUNDLESS</div>
+        <a href="https://forum.playboundless.com" class="form-link" target="_blank">
+            <div class="icon-container"><i data-lucide="github" class="icon-laundry"></i></div>
             <div class="content">
-                <span class="title">Referensi Belajar</span>
-                <span class="description">Kumpulan artikel dan tutorial.</span>
+                <span class="title">Boundless Community Forum</span>
+                <span class="description">Info and Forum.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+        <a href="https://butt.boundless.mayumi.fi/" class="form-link">
+            <div class="icon-container"><i class="fi fi-rs-tags icon-laundry"></i></div>
+            <div class="content">
+                <span class="title">Boundless Universal Trade Tracker</span>
+                <span class="description">Check prices of all materials from shop stands and request baskets.</span>
             </div>
             <div class="arrow">→</div>
         </a>
@@ -379,6 +394,7 @@ function parseDurationToDate(durationStr) {
 }
 
 const countdownGroups = [
+	// Can only use icons from https://lucide.dev/icons/
     {
         category: "Masa Aktif Kartu",
         items: [
@@ -397,14 +413,14 @@ const countdownGroups = [
         category: "Boundless Countdown",
         items: [
             { id: "bon1", title: "Portal", date: "2026-04-14T07:34:32", icon: "door-open" },
-            { id: "bon2", title: "Club", date: "2026-08-19T22:32:58", icon: "door-open" },
+            { id: "bon2", title: "Club", date: "2026-08-19T22:32:58", icon: "hand-fist" },
             { id: "bon99", title: "Planet", date: "2026-03-25T18:36:46", icon: "orbit" }
         ]
     },
     {
         category: "Boundless Estimate",
         items: [
-            { id: "srv1", title: "Club 180 Hari", duration: "0B, 180H, 0J, 0M, 0D", icon: "door-open" },
+            { id: "srv1", title: "Club 180 Hari", duration: "0B, 180H, 0J, 0M, 0D", icon: "hand-fist" },
             { id: "srv2", title: "Portal 5 Minggu 2 Hari (37 Hari)", duration: "0B, 37H, 12J, 41M, 0D", icon: "door-open" },
             { id: "srv3", title: "Compactor 5 Jam 50 Min", duration: "0B, 0H, 5J, 50M, 0D", icon: "door-open" },
             { id: "srv99", title: "Planet Expire 120 Hari", duration: "0B, 120H, 0J, 0M, 0D", icon: "orbit" }
@@ -519,8 +535,8 @@ function logout() {
 
 // --- KONFIGURASI REVISI (UPDATE DI SINI) ---
 function updateVersionDisplay() {
-    const lastUpdate = "2026-03-08 12:10 AM";
-    const note = "Countup Logic Refined";  // Catatan revisi
+    const lastUpdate = "2026-03-08 01.40 PM";
+    const note = "Update target link";  // Catatan revisi
     
     const versionEl = document.getElementById('version-info');
     if (versionEl) {
