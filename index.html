@@ -492,10 +492,11 @@ function startCountdown(id, datetime, isEstimation = false, durationStr = null) 
     const timer = setInterval(() => {
         const now = new Date();
         
-        // JIKA ESTIMASI: Hitung ulang target berdasarkan waktu 'now' + durasi
+        // JIKA ESTIMASI (LOGIKA COUNTUP)
         if (isEstimation && durationStr) {
             const newTarget = parseDurationToDate(durationStr);
             el.innerText = formatFullDate(newTarget);
+            // Estimasi biasanya tidak butuh warna merah karena waktunya "maju"
             return; 
         }
 
@@ -514,6 +515,16 @@ function startCountdown(id, datetime, isEstimation = false, durationStr = null) 
               h = Math.floor((diff % 86400000) / 3600000), 
               m = Math.floor((diff % 3600000) / 60000), 
               s = Math.floor((diff % 60000) / 1000);
+
+        // --- LOGIKA WARNA MERAH (<= 7 HARI) ---
+        if (d <= 7) {
+            el.style.color = "#ef4444"; // Warna merah (Tailwind Red 500)
+            el.style.fontWeight = "600"; // Agak tebal agar mencolok
+        } else {
+            el.style.color = ""; // Kembali ke warna default (var(--text-muted))
+            el.style.fontWeight = "";
+        }
+
         el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
 }
@@ -574,8 +585,8 @@ function logout() {
 
 // --- KONFIGURASI REVISI (UPDATE DI SINI) ---
 function updateVersionDisplay() {
-    const lastUpdate = "2026-03-08 02.34 PM";
-    const note = "Minor Update";  // Catatan revisi
+    const lastUpdate = "2026-03-08 02.40 PM";
+    const note = "Added Red Text Alert for <= 7 Days";  // Catatan revisi
     
     const versionEl = document.getElementById('version-info');
     if (versionEl) {
