@@ -1,308 +1,316 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard</title>
-	<link rel="icon" href="uploads/2026-03-08-dashboardicon.png" type="image/png">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-	
-	<!-- Imported CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css'>
-	
-    <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --accent: #3b82f6;
-            --border: #e2e8f0;
-            --nav-bg: #ffffff;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Dashboard</title>
+        <link rel="icon" href="uploads/2026-03-08-dashboardicon.png" type="image/png">
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-        }
+        <!-- Imported CSS -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@flaticon/flaticon-uicons@3.3.1/css/all/all.min.css'>
 
-        /* --- UI PIN LOGIN --- */
-        #pin-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+        <style>
+            :root {
+                --bg-color: #f8fafc;
+                --card-bg: #ffffff;
+                --text-main: #0f172a;
+                --text-muted: #475569;
+                --accent: #3b82f6;
+                --border: #e2e8f0;
+                --nav-bg: #ffffff;
+            }
 
-        .pin-header { text-align: center; margin-bottom: 30px; }
-        .pin-header h2 { margin: 10px 0 5px; font-weight: 700; }
-        .pin-header p { color: var(--text-muted); font-size: 0.9rem; }
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: var(--bg-color);
+                color: var(--text-main);
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+            }
 
-        .pin-dots {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
-        }
+            /* --- UI PIN LOGIN --- */
+            #pin-overlay {
+                position: fixed;
+                inset: 0;
+                background: var(--bg-color);
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
 
-        .dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            transition: all 0.2s;
-        }
+            .pin-header { text-align: center; margin-bottom: 30px; }
+            .pin-header h2 { margin: 10px 0 5px; font-weight: 700; }
+            .pin-header p { color: var(--text-muted); font-size: 0.9rem; }
 
-        .dot.active {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            transform: scale(1.2);
-        }
+            .pin-dots {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 40px;
+            }
 
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            width: 100%;
-            max-width: 280px;
-        }
+            .dot {
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                border: 2px solid var(--border);
+                transition: all 0.2s;
+            }
 
-        .num-btn {
-            aspect-ratio: 1;
-            border-radius: 50%;
-            border: 1.5px solid var(--border);
-            background: var(--card-bg);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.1s;
-        }
+            .dot.active {
+                background-color: var(--accent);
+                border-color: var(--accent);
+                transform: scale(1.2);
+            }
 
-        .num-btn:active {
-            background: var(--accent);
-            color: white;
-            transform: scale(0.9);
-        }
+            .numpad {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                width: 100%;
+                max-width: 280px;
+            }
 
-        .btn-clear { color: #ef4444; border: none; font-size: 1rem; }
+            .num-btn {
+                aspect-ratio: 1;
+                border-radius: 50%;
+                border: 1.5px solid var(--border);
+                background: var(--card-bg);
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--text-main);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.1s;
+            }
 
-        /* --- DASHBOARD CONTENT --- */
-        .wrapper {
-            width: 100%;
-            max-width: 500px;
-            padding: 40px 20px 100px 20px;
-            display: none; /* Sembunyikan sebelum login */
-        }
+            .num-btn:active {
+                background: var(--accent);
+                color: white;
+                transform: scale(0.9);
+            }
 
-        .page-section { display: none; animation: fadeIn 0.3s ease; }
-        .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            .btn-clear { color: #ef4444; border: none; font-size: 1rem; }
 
-        header { text-align: center; margin-bottom: 30px; }
-        header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 10px; }
-        header p { color: var(--text-muted); font-size: 1rem; }
+            /* --- DASHBOARD CONTENT --- */
+            .wrapper {
+                width: 100%;
+                max-width: 500px;
+                padding: 40px 20px 100px 20px;
+                display: none; /* Sembunyikan sebelum login */
+            }
 
-        .section-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin: 30px 0 12px 5px;
-            font-weight: 700;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 8px;
-        }
+            .page-section { display: none; animation: fadeIn 0.3s ease; }
+            .page-section.active { display: block; }
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .form-link {
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            padding: 18px 20px;
-            margin-bottom: 12px;
-            text-decoration: none;
-            border-radius: 16px;
-            border: 1.5px solid var(--border);
-            transition: all 0.2s ease;
-            color: inherit;
-        }
+            header { text-align: center; margin-bottom: 30px; }
+            header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 10px; }
+            header p { color: var(--text-muted); font-size: 1rem; }
 
-        .form-link:hover { border-color: var(--accent); transform: scale(1.01); }
-		.form-link:hover .arrow {
-			color: var(--accent);
-			margin-left: 10px;
-			transition: color 0.2s ease;
-		}
-		
-        .icon-container { flex-shrink: 0; width: 45px; margin-right: 18px; display: flex; justify-content: center; }
-        .awe-icon { font-size: 1.75rem !important; color: #64748b; }
-        .icon-laundry { width: 32px; height: 32px; color: #64748b; font-size: 32px; }
-        .content { display: flex; flex-direction: column; flex-grow: 1; gap: 4px; }
-        .content .title { font-weight: 600; font-size: 1.15rem; }
-        .content .description { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+            .section-title {
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: var(--text-muted);
+                margin: 30px 0 12px 5px;
+                font-weight: 700;
+                border-bottom: 2px solid var(--border);
+                padding-bottom: 8px;
+            }
 
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            background: var(--nav-bg);
-            display: none; /* Sembunyikan sebelum login */
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
+            .form-link {
+                background: var(--card-bg);
+                display: flex;
+                align-items: center;
+                padding: 18px 20px;
+                margin-bottom: 12px;
+                text-decoration: none;
+                border-radius: 16px;
+                border: 1.5px solid var(--border);
+                transition: all 0.2s ease;
+                color: inherit;
+            }
 
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; gap: 4px; flex: 1; }
-        .nav-item i, .nav-item svg { width: 24px; height: 24px; }
-        .nav-item.active { color: var(--accent); }
-        .nav-item.active .nav-indicator { width: 20px; height: 3px; background: var(--accent); border-radius: 10px; margin-top: 2px; }
-    </style>
-</head>
-<body>
+            .form-link:hover { border-color: var(--accent); transform: scale(1.01); }
+            .form-link:hover .arrow {
+                color: var(--accent);
+                margin-left: 10px;
+                transition: color 0.2s ease;
+            }
 
-<div id="pin-overlay">
-    <div class="pin-header">
-        <i data-lucide="shield-check" style="width: 40px; height: 40px; color: var(--accent);"></i>
-        <h2>Akses Dashboard</h2>
-        <p>Silakan masukkan 6 digit PIN Anda</p>
-		<p id="version-info" style="font-size: 0.7rem; color: #94a3b8; margin-top: 15px; font-family: monospace;"></p>
-    </div>
-    
-    <div class="pin-dots">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>
+            .icon-container { flex-shrink: 0; width: 45px; margin-right: 18px; display: flex; justify-content: center; }		
+            .icon { width: 32px; height: 32px; color: #64748b; font-size: 32px; }
+            .icon .yellow { color: #FFC738; }
+            .content { display: flex; flex-direction: column; flex-grow: 1; gap: 4px; }
+            .content .title { font-weight: 600; font-size: 1.15rem; }
+            .content .description { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
 
-    <div class="numpad">
-        <button class="num-btn" onclick="addPin('1')">1</button>
-        <button class="num-btn" onclick="addPin('2')">2</button>
-        <button class="num-btn" onclick="addPin('3')">3</button>
-        <button class="num-btn" onclick="addPin('4')">4</button>
-        <button class="num-btn" onclick="addPin('5')">5</button>
-        <button class="num-btn" onclick="addPin('6')">6</button>
-        <button class="num-btn" onclick="addPin('7')">7</button>
-        <button class="num-btn" onclick="addPin('8')">8</button>
-        <button class="num-btn" onclick="addPin('9')">9</button>
-        <button class="num-btn btn-clear" onclick="clearPin()">Hapus</button>
-        <button class="num-btn" onclick="addPin('0')">0</button>
-        <button class="num-btn btn-clear" onclick="logout()" title="Logout Supabase">
-            <i data-lucide="log-out" style="width: 20px;"></i>
-        </button>
-    </div>
-</div>
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 500px;
+                background: var(--nav-bg);
+                display: none; /* Sembunyikan sebelum login */
+                justify-content: space-around;
+                padding: 12px 0;
+                border-top: 1px solid var(--border);
+                box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+                z-index: 1000;
+            }
 
-<!--------------------------- COUNTDOWN SECTION --------------------------->
+            .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; gap: 4px; flex: 1; }
+            .nav-item i, .nav-item svg { width: 24px; height: 24px; }
+            .nav-item.active { color: var(--accent); }
+            .nav-item.active .nav-indicator { width: 20px; height: 3px; background: var(--accent); border-radius: 10px; margin-top: 2px; }
+        </style>
+    </head>
+    <body>
 
-<div class="wrapper" id="main-wrapper">
-    <div id="page-countdown" class="page-section active">
-        <header>
-            <h1>Daftar Pengingat</h1>
-            <p>Pantau tenggat waktu penting</p>
-        </header>
-        <div id="dynamic-sections"></div>
-    </div>
-	
-<!--------------------------- FORMULIR SECTION --------------------------->
+        <div id="pin-overlay">
+            <div class="pin-header">
+                <i data-lucide="shield-check" style="width: 40px; height: 40px; color: var(--accent);"></i>
+                <h2>Akses Dashboard</h2>
+                <p>Silakan masukkan 6 digit PIN Anda</p>
+                <p id="version-info" style="font-size: 0.7rem; color: #94a3b8; margin-top: 15px; font-family: monospace;"></p>
+            </div>
 
-    <div id="page-formulir" class="page-section">
-        <header>
-            <h1>Pusat Formulir</h1>
-            <p>Pilih layanan di bawah ini</p>
-        </header>
-        <main>
-            <div class="section-title">Layanan Keluarga</div>
-            <a href="https://forms.fillout.com/t/8MVkMiqyPgus" class="form-link" target="_blank">
-                <div class="icon-container"><i data-lucide="alarm-clock-plus" class="icon-laundry"></i></i></div>
-                <div class="content">
-                    <span class="title">Pengingat Keluarga</span>
-                    <span class="description">Atur jadwal notifikasi otomatis ke grup WhatsApp.</span>
-                </div>
-                <div class="arrow">→</div>
-            </a>
-            <a href="https://forms.fillout.com/t/dWBAmS9te4us" class="form-link" target="_blank">
-                <div class="icon-container"><i data-lucide="clipboard-plus" class="icon-laundry"></i></i></div>
-                <div class="content">
-                    <span class="title">Rekam Medis Jerry - Siska</span>
-                    <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
-                </div>
-                <div class="arrow">→</div>
-            </a>
-            <a href="https://forms.fillout.com/t/vvMetw9MAyus" class="form-link" target="_blank">
-                <div class="icon-container"><i data-lucide="clipboard-plus" class="icon-laundry"></i></i></div>
+            <div class="pin-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <div class="numpad">
+                <button class="num-btn" onclick="addPin('1')">1</button>
+                <button class="num-btn" onclick="addPin('2')">2</button>
+                <button class="num-btn" onclick="addPin('3')">3</button>
+                <button class="num-btn" onclick="addPin('4')">4</button>
+                <button class="num-btn" onclick="addPin('5')">5</button>
+                <button class="num-btn" onclick="addPin('6')">6</button>
+                <button class="num-btn" onclick="addPin('7')">7</button>
+                <button class="num-btn" onclick="addPin('8')">8</button>
+                <button class="num-btn" onclick="addPin('9')">9</button>
+                <button class="num-btn btn-clear" onclick="clearPin()">Hapus</button>
+                <button class="num-btn" onclick="addPin('0')">0</button>
+                <button class="num-btn btn-clear" onclick="logout()" title="Logout Supabase">
+                    <i data-lucide="log-out" style="width: 20px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!--------------------------- COUNTDOWN SECTION --------------------------->
+
+        <div class="wrapper" id="main-wrapper">
+            <div id="page-countdown" class="page-section active">
+                <header>
+                    <h1>Daftar Pengingat</h1>
+                    <p>Pantau tenggat waktu penting</p>
+                </header>
+                <div id="dynamic-sections"></div>
+            </div>
+
+            <!--------------------------- FORMULIR SECTION --------------------------->
+
+            <div id="page-formulir" class="page-section">
+                <header>
+                    <h1>Pusat Formulir</h1>
+                    <p>Pilih layanan di bawah ini</p>
+                </header>
+                <main>
+                    <div class="section-title">Layanan Keluarga</div>
+                    <a href="https://forms.fillout.com/t/8MVkMiqyPgus" class="form-link" target="_blank">
+                        <div class="icon-container"><i data-lucide="alarm-clock-plus" class="icon yellow"></i></div>
+                        <div class="content">
+                            <span class="title">Pengingat Keluarga</span>
+                            <span class="description">Atur jadwal notifikasi otomatis ke grup WhatsApp.</span>
+                        </div>
+                        <div class="arrow">→</div>
+                    </a>
+                    <a href="https://forms.fillout.com/t/dWBAmS9te4us" class="form-link" target="_blank">
+                        <div class="icon-container"><i data-lucide="clipboard-plus" class="icon yellow"></i></i></div>
+                    <div class="content">
+                        <span class="title">Rekam Medis Jerry - Siska</span>
+                        <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
+                    </div>
+                    <div class="arrow">→</div>
+                    </a>
+                <a href="https://forms.fillout.com/t/vvMetw9MAyus" class="form-link" target="_blank">
+                    <div class="icon-container"><i data-lucide="clipboard-plus" class="icon yellow"></i></i></div>
                 <div class="content">
                     <span class="title">Rekam Medis Papa - Mama</span>
                     <span class="description">Simpan dan pantau riwayat kesehatan keluarga.</span>
                 </div>
                 <div class="arrow">→</div>
-            </a>
+                </a>
 
             <div class="section-title">INIJO LAUNDRY</div>
             <a href="https://forms.fillout.com/t/qENdoJR2j3us" class="form-link" target="_blank">
-                <div class="icon-container"><i class="fi fi-rr-file-invoice-dollar icon-laundry"></i></div>
+                <div class="icon-container"><i class="fi fi-rr-file-invoice-dollar icon yellow"></i></div>
                 <div class="content">
                     <span class="title">Arsip Nota</span>
                     <span class="description">Simpan data transaksi nota untuk arsip.</span>
                 </div>
                 <div class="arrow">→</div>
             </a>
-        </main>
-    </div>
+            </main>
+        </div>
 
-<!--------------------------- BOOKMARK SECTION --------------------------->
+    <!--------------------------- BOOKMARK SECTION --------------------------->
 
     <div id="page-bookmark" class="page-section">
         <header>
             <h1>Bookmark</h1>
             <p>Akses cepat situs favorit</p>
         </header>
-		
+
         <div class="section-title">KONTRAK</div>
         <a href="https://jerryst21.github.io/travel/" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-rr-rent icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rr-rent icon"></i></div>
             <div class="content">
                 <span class="title">Daftar Perjanjian Sewa Menyewa</span>
                 <span class="description">Informasi penyewa, masa waktu sewa, nilai sewa, jaminan dan catatan lain.</span>
             </div>
             <div class="arrow">→</div>
         </a>
-		
+        <a href="https://jerryst21.github.io/tools/" class="form-link" target="_blank">
+            <div class="icon-container"><i class="fi fi-rr-calculator icon"></i></div>
+            <div class="content">
+                <span class="title">Karkulator Pajak Properti</span>
+                <span class="description">Menghitung pajak PPh, BPHTB dan estimasi biaya lain.</span>
+            </div>
+            <div class="arrow">→</div>
+        </a>
+
         <div class="section-title">TRAVEL</div>
         <a href="https://jerryst21.github.io/travel/" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-rr-book-atlas icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rr-book-atlas icon"></i></div>
             <div class="content">
                 <span class="title">Travel Information</span>
                 <span class="description">Personal travel itinerary.</span>
             </div>
             <div class="arrow">→</div>
         </a>
-		
+
         <div class="section-title">BOUNDLESS</div>
         <a href="https://forum.playboundless.com" class="form-link" target="_blank">
-            <div class="icon-container"><i data-lucide="hand-fist" class="icon-laundry"></i></div>
+            <div class="icon-container"><i data-lucide="hand-fist" class="icon"></i></div>
             <div class="content">
                 <span class="title">Boundless Community Forum</span>
                 <span class="description">Info and Forum.</span>
@@ -310,7 +318,7 @@
             <div class="arrow">→</div>
         </a>
         <a href="https://butt.boundless.mayumi.fi/" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-rs-tags icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rs-tags icon"></i></div>
             <div class="content">
                 <span class="title">Boundless Universal Trade Tracker</span>
                 <span class="description">Check prices of all materials from shop stands and request baskets.</span>
@@ -318,7 +326,7 @@
             <div class="arrow">→</div>
         </a>
         <a href="https://boundless.mayumi.fi/recipes/" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-rr-calculator icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rr-calculator icon"></i></div>
             <div class="content">
                 <span class="title">Boundless Pricer</span>
                 <span class="description">Recipes Calculator.</span>
@@ -326,7 +334,7 @@
             <div class="arrow">→</div>
         </a>
         <a href="https://boundlessinfo.com/home" class="form-link" target="_blank">
-            <div class="icon-container"><i class="fi fi-rs-tags icon-laundry"></i></div>
+            <div class="icon-container"><i class="fi fi-rs-tags icon"></i></div>
             <div class="content">
                 <span class="title">Boundless Information Station</span>
                 <span class="description">Information on worlds, resources, colors, items, farming and forging.</span>
@@ -334,7 +342,7 @@
             <div class="arrow">→</div>
         </a>
     </div>
-</div>
+    </div>
 
 <!--------------------------- NAVIGATION TAB --------------------------->
 
@@ -357,248 +365,248 @@
 </nav>
 
 <script>
-// --- KONFIGURASI SUPABASE ---
-const SUPABASE_URL = 'https://pdzhlpsghhqotzeblrpg.supabase.co'; 
-const SUPABASE_KEY = 'sb_publishable_luyvDNa6DDuZcXQLQ7Ijfw_ZzG3Uj8n'; 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // --- KONFIGURASI SUPABASE ---
+    const SUPABASE_URL = 'https://pdzhlpsghhqotzeblrpg.supabase.co'; 
+    const SUPABASE_KEY = 'sb_publishable_luyvDNa6DDuZcXQLQ7Ijfw_ZzG3Uj8n'; 
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// --- LOGIKA PIN ---
-let currentPin = "";
-const targetPinLength = 6;
+    // --- LOGIKA PIN ---
+    let currentPin = "";
+    const targetPinLength = 6;
 
-function addPin(num) {
-    if (currentPin.length < targetPinLength) {
-        currentPin += num;
-        updateDots();
-        if (currentPin.length === targetPinLength) {
-            validatePin(currentPin);
+    function addPin(num) {
+        if (currentPin.length < targetPinLength) {
+            currentPin += num;
+            updateDots();
+            if (currentPin.length === targetPinLength) {
+                validatePin(currentPin);
+            }
         }
     }
-}
 
-function clearPin() {
-    currentPin = "";
-    updateDots();
-}
+    function clearPin() {
+        currentPin = "";
+        updateDots();
+    }
 
-function updateDots() {
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach((dot, index) => {
-        if (index < currentPin.length) dot.classList.add('active');
-        else dot.classList.remove('active');
-    });
-}
+    function updateDots() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            if (index < currentPin.length) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
 
-async function validatePin(pin) {
-    const pinNumber = Number(pin);
-    const { data, error } = await supabaseClient
+    async function validatePin(pin) {
+        const pinNumber = Number(pin);
+        const { data, error } = await supabaseClient
         .from('access_control')
         .select('pin_code')
         .eq('pin_code', pinNumber)
         .maybeSingle();
 
-    if (error) {
-        console.error("Detail Error:", error.message);
-    }
-
-    if (data) {
-        document.getElementById('pin-overlay').style.display = 'none';
-        document.getElementById('main-wrapper').style.display = 'block';
-        document.getElementById('main-nav').style.display = 'flex';
-        lucide.createIcons();
-    } else {
-        alert("PIN Salah! Silakan coba lagi.");
-        clearPin();
-    }
-}
-
-// --- LOGIKA DASHBOARD & ESTIMASI ---
-
-// Fungsi baru untuk mengubah "3B, 0H, 0J, 0M, 0D" menjadi Tanggal Nyata
-function parseDurationToDate(durationStr) {
-    const parts = durationStr.match(/\d+/g).map(Number);
-    if (!parts || parts.length < 5) return null;
-    
-    const [months, days, hours, minutes, seconds] = parts;
-    const now = new Date();
-    
-    // Tambahkan durasi ke waktu sekarang
-    now.setMonth(now.getMonth() + months);
-    now.setDate(now.getDate() + days);
-    now.setHours(now.getHours() + hours);
-    now.setMinutes(now.getMinutes() + minutes);
-    now.setSeconds(now.getSeconds() + seconds);
-
-    return now.toISOString();
-}
-
-const countdownGroups = [
-	// Can only use icons from https://lucide.dev/icons/
-    {
-        category: "Masa Aktif Kartu",
-        items: [
-            { id: "sim1", title: "Telkomsel 0822 8887 1983", date: "2026-03-15T00:00:00", icon: "card-sim" },
-            { id: "sim2", title: "Telkomsel Laundry Inijo", date: "2026-05-20T23:59:59", icon: "card-sim" }
-        ]
-    },
-    {
-        category: "Estimasi Masa Aktif Kartu",
-        items: [
-            // Contoh penggunaan durasi estimasi
-            { id: "est1", title: "Masa Berlaku 30 Hari", duration: "0B, 30H, 0J, 0M, 0D", icon: "card-sim" }
-        ]
-    },
-    {
-        category: "Boundless Countdown",
-        items: [
-            { id: "bon1", title: "Portal", date: "2026-04-14T07:34:32", icon: "door-open" },
-            { id: "bon2", title: "Club", date: "2026-08-19T22:32:58", icon: "hand-fist" },
-            { id: "bon99", title: "Planet", date: "2026-03-25T18:36:46", icon: "orbit" }
-        ]
-    },
-    {
-        category: "Boundless Estimate",
-        items: [
-            { id: "srv1", title: "Club 180 Hari", duration: "0B, 180H, 0J, 0M, 0D", icon: "hand-fist" },
-            { id: "srv2", title: "Portal 5 Minggu 2 Hari (37 Hari)", duration: "0B, 37H, 12J, 41M, 0D", icon: "door-open" },
-            { id: "srv3", title: "Compactor 5 Jam 50 Min", duration: "0B, 0H, 5J, 50M, 0D", icon: "door-open" },
-            { id: "srv99", title: "Planet Expire 120 Hari", duration: "0B, 120H, 0J, 0M, 0D", icon: "orbit" }
-        ]
-    }
-];
-
-function switchPage(pageId, navElement) {
-    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    navElement.classList.add('active');
-    window.scrollTo(0, 0);
-    lucide.createIcons();
-}
-
-function copyToClipboard(id) {
-    const title = document.getElementById('title-' + id).innerText;
-    const countdownText = document.getElementById(id).innerText;
-    const fullText = `${title}: ${countdownText}`;
-    navigator.clipboard.writeText(fullText).then(() => {
-        alert("Teks berhasil disalin: " + fullText);
-    });
-}
-
-function startCountdown(id, datetime, isEstimation = false, durationStr = null) {
-    const el = document.getElementById(id);
-    if(!el) return;
-    
-    const timer = setInterval(() => {
-        const now = new Date();
-        
-        // JIKA ESTIMASI (LOGIKA COUNTUP)
-        if (isEstimation && durationStr) {
-            const newTarget = parseDurationToDate(durationStr);
-            el.innerText = formatFullDate(newTarget);
-            // Estimasi biasanya tidak butuh warna merah karena waktunya "maju"
-            return; 
+        if (error) {
+            console.error("Detail Error:", error.message);
         }
 
-        // JIKA COUNTDOWN BIASA
-        const targetDate = new Date(datetime);
-        const diff = targetDate.getTime() - now.getTime();
-
-        if (diff <= 0) {
-            clearInterval(timer);
-            el.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;color:#e11d48;"><i data-lucide="alarm-clock-check" style="width:18px;"></i> Selesai!</span>`;
+        if (data) {
+            document.getElementById('pin-overlay').style.display = 'none';
+            document.getElementById('main-wrapper').style.display = 'block';
+            document.getElementById('main-nav').style.display = 'flex';
             lucide.createIcons();
-            return;
-        }
-
-        const d = Math.floor(diff / 86400000), 
-              h = Math.floor((diff % 86400000) / 3600000), 
-              m = Math.floor((diff % 3600000) / 60000), 
-              s = Math.floor((diff % 60000) / 1000);
-
-        // --- LOGIKA WARNA MERAH (<= 7 HARI) ---
-        if (d <= 7) {
-            el.style.color = "#ef4444"; // Warna merah (Tailwind Red 500)
-            el.style.fontWeight = "600"; // Agak tebal agar mencolok
         } else {
-            el.style.color = ""; // Kembali ke warna default (var(--text-muted))
-            el.style.fontWeight = "";
+            alert("PIN Salah! Silakan coba lagi.");
+            clearPin();
         }
+    }
 
-        el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
-    }, 1000);
-}
+    // --- LOGIKA DASHBOARD & ESTIMASI ---
 
-// Fungsi untuk memformat tanggal menjadi "YYYY-MM-DD HH:mm:ss"
-function formatFullDate(date) {
-    const d = new Date(date);
-    const pad = (n) => n.toString().padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
+    // Fungsi baru untuk mengubah "3B, 0H, 0J, 0M, 0D" menjadi Tanggal Nyata
+    function parseDurationToDate(durationStr) {
+        const parts = durationStr.match(/\d+/g).map(Number);
+        if (!parts || parts.length < 5) return null;
 
-function renderSections() {
-    const container = document.getElementById('dynamic-sections');
-    container.innerHTML = "";
-    
-    countdownGroups.forEach(group => {
-        group.items.forEach(item => {
-            if (item.duration && !item.date) {
-                // Kalkulasi awal untuk keperluan sorting saja
-                item.date = parseDurationToDate(item.duration);
-                item.isEstimation = true;
-            }
+        const [months, days, hours, minutes, seconds] = parts;
+        const now = new Date();
+
+        // Tambahkan durasi ke waktu sekarang
+        now.setMonth(now.getMonth() + months);
+        now.setDate(now.getDate() + days);
+        now.setHours(now.getHours() + hours);
+        now.setMinutes(now.getMinutes() + minutes);
+        now.setSeconds(now.getSeconds() + seconds);
+
+        return now.toISOString();
+    }
+
+    const countdownGroups = [
+        // Can only use icons from https://lucide.dev/icons/
+        {
+            category: "Masa Aktif Kartu",
+            items: [
+                { id: "sim1", title: "Telkomsel 0822 8887 1983", date: "2026-07-28T12:00:00", icon: "card-sim" },
+                { id: "sim2", title: "Telkomsel Laundry Inijo", date: "2026-05-20T23:59:59", icon: "card-sim" }
+            ]
+        },
+        {
+            category: "Estimasi Masa Aktif Kartu",
+            items: [
+                // Contoh penggunaan durasi estimasi
+                { id: "est1", title: "Masa Berlaku 30 Hari", duration: "0B, 30H, 0J, 0M, 0D", icon: "card-sim" }
+            ]
+        },
+        {
+            category: "Boundless Countdown",
+            items: [
+                { id: "bon1", title: "Portal", date: "2026-04-14T07:34:32", icon: "door-open" },
+                { id: "bon2", title: "Club", date: "2026-08-19T22:32:58", icon: "hand-fist" },
+                { id: "bon99", title: "Planet", date: "2026-03-25T18:36:46", icon: "orbit" }
+            ]
+        },
+        {
+            category: "Boundless Estimate",
+            items: [
+                { id: "srv1", title: "Club 180 Hari", duration: "0B, 180H, 0J, 0M, 0D", icon: "hand-fist" },
+                { id: "srv2", title: "Portal 5 Minggu 2 Hari (37 Hari)", duration: "0B, 37H, 12J, 41M, 0D", icon: "door-open" },
+                { id: "srv3", title: "Compactor 5 Jam 50 Min", duration: "0B, 0H, 5J, 50M, 0D", icon: "door-open" },
+                { id: "srv99", title: "Planet Expire 120 Hari", duration: "0B, 120H, 0J, 0M, 0D", icon: "orbit" }
+            ]
+        }
+    ];
+
+    function switchPage(pageId, navElement) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        navElement.classList.add('active');
+        window.scrollTo(0, 0);
+        lucide.createIcons();
+    }
+
+    function copyToClipboard(id) {
+        const title = document.getElementById('title-' + id).innerText;
+        const countdownText = document.getElementById(id).innerText;
+        const fullText = `${title}: ${countdownText}`;
+        navigator.clipboard.writeText(fullText).then(() => {
+            alert("Teks berhasil disalin: " + fullText);
         });
+    }
 
-        group.items.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
-        const st = document.createElement('div');
-        st.className = 'section-title';
-        st.innerText = group.category;
-        container.appendChild(st);
+    function startCountdown(id, datetime, isEstimation = false, durationStr = null) {
+        const el = document.getElementById(id);
+        if(!el) return;
 
-        group.items.forEach(item => {
-            const link = document.createElement('a');
-            link.className = "form-link";
-            link.onclick = () => copyToClipboard(item.id);
-            link.innerHTML = `
-                <div class="icon-container"><i data-lucide="${item.icon}" class="icon-laundry"></i></div>
+        const timer = setInterval(() => {
+            const now = new Date();
+
+            // JIKA ESTIMASI (LOGIKA COUNTUP)
+            if (isEstimation && durationStr) {
+                const newTarget = parseDurationToDate(durationStr);
+                el.innerText = formatFullDate(newTarget);
+                // Estimasi biasanya tidak butuh warna merah karena waktunya "maju"
+                return; 
+            }
+
+            // JIKA COUNTDOWN BIASA
+            const targetDate = new Date(datetime);
+            const diff = targetDate.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                el.innerHTML = `<span style="display:inline-flex;align-items:center;gap:8px;color:#e11d48;"><i data-lucide="alarm-clock-check" style="width:18px;"></i> Selesai!</span>`;
+                lucide.createIcons();
+                return;
+            }
+
+            const d = Math.floor(diff / 86400000), 
+                  h = Math.floor((diff % 86400000) / 3600000), 
+                  m = Math.floor((diff % 3600000) / 60000), 
+                  s = Math.floor((diff % 60000) / 1000);
+
+            // --- LOGIKA WARNA MERAH (<= 7 HARI) ---
+            if (d <= 7) {
+                el.style.color = "#ef4444"; // Warna merah (Tailwind Red 500)
+                el.style.fontWeight = "600"; // Agak tebal agar mencolok
+            } else {
+                el.style.color = ""; // Kembali ke warna default (var(--text-muted))
+                el.style.fontWeight = "";
+            }
+
+            el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+        }, 1000);
+    }
+
+    // Fungsi untuk memformat tanggal menjadi "YYYY-MM-DD HH:mm:ss"
+    function formatFullDate(date) {
+        const d = new Date(date);
+        const pad = (n) => n.toString().padStart(2, '0');
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function renderSections() {
+        const container = document.getElementById('dynamic-sections');
+        container.innerHTML = "";
+
+        countdownGroups.forEach(group => {
+            group.items.forEach(item => {
+                if (item.duration && !item.date) {
+                    // Kalkulasi awal untuk keperluan sorting saja
+                    item.date = parseDurationToDate(item.duration);
+                    item.isEstimation = true;
+                }
+            });
+
+            group.items.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const st = document.createElement('div');
+            st.className = 'section-title';
+            st.innerText = group.category;
+            container.appendChild(st);
+
+            group.items.forEach(item => {
+                const link = document.createElement('a');
+                link.className = "form-link";
+                link.onclick = () => copyToClipboard(item.id);
+                link.innerHTML = `
+                <div class="icon-container"><i data-lucide="${item.icon}" class="icon"></i></div>
                 <div class="content">
                     <span class="title" id="title-${item.id}">${item.title}</span>
                     <span class="description" id="${item.id}">Memuat...</span>
-                </div>
+    </div>
                 <div class="arrow">→</div>`;
-            container.appendChild(link);
-            
-            // Tambahkan parameter item.duration di akhir
-            startCountdown(item.id, item.date, item.isEstimation, item.duration);
+                container.appendChild(link);
+
+                // Tambahkan parameter item.duration di akhir
+                startCountdown(item.id, item.date, item.isEstimation, item.duration);
+            });
         });
-    });
-    lucide.createIcons();
-}
-
-function logout() {
-    document.getElementById('pin-overlay').style.display = 'flex';
-    document.getElementById('main-wrapper').style.display = 'none';
-    document.getElementById('main-nav').style.display = 'none';
-    clearPin();
-}
-
-// --- KONFIGURASI REVISI (UPDATE DI SINI) ---
-function updateVersionDisplay() {
-    const lastUpdate = "2026-03-08 02.40 PM";
-    const note = "Added Red Text Alert for <= 7 Days";  // Catatan revisi
-    
-    const versionEl = document.getElementById('version-info');
-    if (versionEl) {
-        versionEl.innerText = `Revisi Terakhir: ${lastUpdate} (${note})`;
+        lucide.createIcons();
     }
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-	updateVersionDisplay();
-    renderSections();
-    lucide.createIcons();
-});
+    function logout() {
+        document.getElementById('pin-overlay').style.display = 'flex';
+        document.getElementById('main-wrapper').style.display = 'none';
+        document.getElementById('main-nav').style.display = 'none';
+        clearPin();
+    }
+
+    // --- KONFIGURASI REVISI (UPDATE DI SINI) ---
+    function updateVersionDisplay() {
+        const lastUpdate = "2026-03-08 03.20 PM";
+        const note = "Add new bookmark";  // Catatan revisi
+
+        const versionEl = document.getElementById('version-info');
+        if (versionEl) {
+            versionEl.innerText = `Revisi Terakhir: ${lastUpdate} (${note})`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        updateVersionDisplay();
+        renderSections();
+        lucide.createIcons();
+    });
 </script>
 </body>
 </html>
